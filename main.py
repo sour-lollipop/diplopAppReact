@@ -21,6 +21,7 @@ def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
         return user
     raise HTTPException(status_code=401, detail="Invalid username or password")
 
+# Создание пользователя
 @app.post("/users")
 def create_user(user: User):
     user_id = str(uuid4())
@@ -32,10 +33,13 @@ def create_user(user: User):
     
     if user_collection.find_one({"user_email": user.user_email}):
         return {"message": "This email already exists"}
+    elif user_collection.find_one({"user_phone": user.user_email}):
+        return {"message": "This phone already exists"}
     else:
         user_collection.insert_one(user_dict) 
         return {"message": "User created successfully"}
 
+# Поиск пользователя
 @app.get("/users/{_id}")
 def get_user(_id: str, authenticated_user: User = Depends(authenticate)):
     user = user_collection.find_one({"user_id": _id})
@@ -44,12 +48,14 @@ def get_user(_id: str, authenticated_user: User = Depends(authenticate)):
     else:
         raise HTTPException(status_code=404, detail="User not found")
 
+# Редактирование пользователя
 @app.put("/users/{_id}")
 def update_user(_id: str, user: User, image: UploadFile = File(...), authenticated_user: User = Depends(authenticate)):
     user_dict = user.dict(exclude_unset=True)
     user = user_collection.update_one({"user_id": _id}, {"$set": user_dict})
     return {"message": "User updated successfully"}
 
+# Обновление аватара пользователя
 @app.put("/users_image/{_id}")
 def upload_user_image(_id: str, image: UploadFile = File(...), authenticated_user: User = Depends(authenticate)):
     user = user_collection.find_one({"user_id": _id})
@@ -60,11 +66,13 @@ def upload_user_image(_id: str, image: UploadFile = File(...), authenticated_use
     else:
         raise HTTPException(status_code=404, detail="User not found")
 
+# Удаление пользователя
 @app.delete("/users/{_id}")
 def delete_user(_id: str, authenticated_user: User = Depends(authenticate)):
     user_collection.delete_one({"user_id": _id})
     return {"message": "User deleted successfully"}
 
+# Создание достопромичательности
 @app.post("/showplaces")
 def create_showplace(
                     showplace_title_en: str,
@@ -95,6 +103,7 @@ def create_showplace(
         showplace_collection.insert_one(Showplace)
         return {"message": "Showplace created successfully"}
 
+# Поиск достопромичательности
 @app.get("/showplaces/{_id}")
 def get_showplace(_id: str, authenticated_user: User = Depends(authenticate)):
     showplace = showplace_collection.find_one({"showplace_id": _id})
@@ -103,6 +112,7 @@ def get_showplace(_id: str, authenticated_user: User = Depends(authenticate)):
     else:
         raise HTTPException(status_code=404, detail="Showplace not found")
 
+# Редактирование достопромичательности
 @app.put("/showplaces/{_id}")
 def update_showplace(_id: str, showplace_title_en: str,
                     showplace_title_ru: str, 
@@ -126,6 +136,7 @@ def update_showplace(_id: str, showplace_title_en: str,
     showplace_collection.update_one({"showplace_id": _id}, {"$set": Showplace})
     return {"message": "Showplace updated successfully"}
 
+# Удаление достопромичательности
 @app.delete("/showplaces/{_id}")
 def delete_showplace(_id: str, authenticated_user: User = Depends(authenticate)):
     showplace_collection.delete_one({"showplace_id": _id})
