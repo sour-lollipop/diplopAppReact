@@ -6,6 +6,7 @@ class User(BaseModel):
     user_id: str
     user_name: str
     user_email: EmailStr  
+    user_phone: str
     password: str
     lang: str
     user_favorites: str 
