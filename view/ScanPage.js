@@ -5,7 +5,7 @@ import { StyleSheet, View, Text } from "react-native";
 const ScanScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
-      <Text>This is the Scan screen</Text>
+      <Text>This is the Scaner screen/ camera</Text>
     </View>
   );
 };

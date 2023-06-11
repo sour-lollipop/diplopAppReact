@@ -17,7 +17,7 @@ showplace_collection = db["showplaces"]
 # Аутентификация пользователя
 def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
     user = user_collection.find_one({"user_email": credentials.username})
-    if user and user["password"] == credentials.password:
+    if user and user["password"] == hash(credentials.password):
         return user
     raise HTTPException(status_code=401, detail="Invalid username or password")
 
@@ -26,8 +26,8 @@ def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
 def create_user(user: User):
     user_id = str(uuid4())
     user.user_id = user_id
-
     user_dict = user.dict()
+    user_dict['password'] = hash(user_dict["password"])
     if not user.user_email.count("@") == 1:
         raise HTTPException(status_code=400, detail="Invalid email format")
     

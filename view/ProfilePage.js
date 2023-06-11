@@ -5,13 +5,12 @@ import { NavigationContainer } from "@react-navigation/native";
 const ProfileScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
-      <Text>This is the Profile screen123123132123</Text>
+      <Text>This is the Profile screen</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-   
   screen: {
     display: "flex",
     paddingHorizontal: 16,

@@ -9,19 +9,6 @@ import ScanScreen from "./view/ScanPage";
 
 const Tab = createBottomTabNavigator();
 
-export const Button2 = () => {
-  const navigation = useNavigation();
-
-  return (
-    <TouchableOpacity
-      style={styles.scanButton}
-      // onPress={() => navigate("/Scan")}
-    >
-      <MaterialCommunityIcons name="qrcode-scan" color="white" size={30} />
-    </TouchableOpacity>
-  );
-};
-
 const App = ({ navigation }) => {
   return (
     <>
@@ -57,30 +44,36 @@ const App = ({ navigation }) => {
             name="main"
             component={MainScreen}
             options={{ headerShown: false }}
-          /> 
+          />
+          <Tab.Screen
+            name="scan"
+            component={ScanScreen}
+            options={{
+              headerShown: false,
+              tabBarButton: (props) => (
+                <TouchableOpacity
+                  style={styles.scanButton}
+                  onPress={(e) => {
+                    props.onPress?.(e);
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name="qrcode-scan"
+                    color="white"
+                    size={30}
+                  />
+                </TouchableOpacity>
+              ),
+            }}
+          />
           <Tab.Screen
             name="profile"
             component={ProfileScreen}
             options={{ headerShown: false }}
           />
         </Tab.Navigator>
-        {/* <Button2 /> */}
-        <TouchableOpacity
-          style={styles.scanButton}
-          onPress={() => navigation.navigate(Scan)}
-        >
-          <MaterialCommunityIcons name="qrcode-scan" color="white" size={30} />
-        </TouchableOpacity>
       </NavigationContainer>
     </>
-  );
-};
-
-const Scan = ({ navigation }) => {
-  return (
-    <View style={styles.screen}>
-      <Text>This is the Scan screen</Text>
-    </View>
   );
 };
 
@@ -95,9 +88,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#1573FE",
     justifyContent: "center",
     alignItems: "center",
-    position: "absolute",
-    top: "90%",
-    right: "40%",
+    // position: "absolute",
+    top: "-10%",
+    // right: "40%",
   },
   tabBar: {
     borderTopLeftRadius: 20,
