@@ -1,6 +1,38 @@
-import { StyleSheet, Text, View, TextInput, Button, Image } from "react-native";
+import { text } from "@fortawesome/fontawesome-svg-core";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Image,
+  Alert,
+} from "react-native";
 
 const Signup = ({ navigation }) => {
+  const [fdata, setFdata] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+  const [errormsg, setErrormsg] = useState(null);
+
+  const Sendtobackend = () => {
+    // console.log(fdata);
+    if (
+      fdata.email == "" ||
+      fdata.name == "" ||
+      fdata.phone == "" ||
+      fdata.password == ""
+    ) {
+      return Alert.alert("All fields are required");
+    }
+    else{
+        fetch('http://127.0.0.1:8000/users')
+    }
+  };
   return (
     <View>
       <Image
@@ -13,29 +45,33 @@ const Signup = ({ navigation }) => {
           style={styles.TextInput}
           placeholder="Email"
           placeholderTextColor={"#B3B3B3"}
+          onChangeText={(text) => setFdata({ ...fdata, email: text })}
         ></TextInput>
         <TextInput
           style={styles.TextInput}
           placeholder="Name"
           placeholderTextColor={"#B3B3B3"}
+          onChangeText={(text) => setFdata({ ...fdata, name: text })}
         ></TextInput>
         <TextInput
           style={styles.TextInput}
           placeholder="Phone number"
           placeholderTextColor={"#B3B3B3"}
+          onChangeText={(text) => setFdata({ ...fdata, phone: text })}
         ></TextInput>
         <TextInput
           style={styles.TextInput}
           secureTextEntry={true}
           placeholder="Password"
           placeholderTextColor={"#B3B3B3"}
+          onChangeText={(text) => setFdata({ ...fdata, password: text })}
         ></TextInput>
         <View style={styles.siginbutton}>
           <Button
             title="SIGN UP"
             color={"#0713CD"}
-            onPress={(e) => {
-              account = 1;
+            onPress={() => {
+              Sendtobackend();
             }}
           />
         </View>
