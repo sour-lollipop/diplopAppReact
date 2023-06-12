@@ -1,93 +1,94 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, Button, View, Text, TextInput } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  View,
+  Text,
+  TextInput,
+  Image,
+} from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  useNavigation,
+  Link,
+} from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MainScreen from "./view/MainPage";
 import ProfileScreen from "./view/ProfilePage";
 import ScanScreen from "./view/ScanPage";
 import LoginPage from "./view/Login";
-
+import SignupPage from "./view/Signup";
 
 const Tab = createBottomTabNavigator();
 
-let account = 0;
-
 const App = ({ navigation }) => {
-  if (account == 0) {
-    return (
-      <View style={styles.screen}>
-        <Text>This is the Login screen</Text>
-      </View>
-    );
+  return (
+    <>
+      <NavigationContainer>
+        <Tab.Navigator
+          style={styles.tabBar}
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-  } else {
-    return (
-      <>
-        <NavigationContainer>
-          <Tab.Navigator
-            style={styles.tabBar}
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
+              if (route.name === "main") {
+                iconName = focused ? "home" : "home";
+              } else if (route.name === "scan") {
+                iconName = focused ? "qrcode-scan" : "qrcode-scan";
+              } else if (route.name === "profile") {
+                iconName = focused ? "account" : "account";
+              }
 
-                if (route.name === "main") {
-                  iconName = focused ? "home" : "home";
-                } else if (route.name === "scan") {
-                  iconName = focused ? "qrcode-scan" : "qrcode-scan";
-                } else if (route.name === "profile") {
-                  iconName = focused ? "account" : "account";
-                }
-
-                return (
+              return (
+                <MaterialCommunityIcons
+                  name={iconName}
+                  size={size}
+                  color={color}
+                />
+              );
+            },
+            tabBarLabel: "",
+            tabBarActiveTintColor: "#1573FE",
+            tabBarInactiveTintColor: "gray",
+          })}
+        >
+          <Tab.Screen
+            name="main"
+            component={MainScreen}
+            options={{ headerShown: false }}
+          />
+          <Tab.Screen
+            name="scan"
+            component={ScanScreen}
+            options={{
+              headerShown: false,
+              tabBarButton: (props) => (
+                <TouchableOpacity
+                  style={styles.scanButton}
+                  onPress={(e) => {
+                    props.onPress?.(e);
+                  }}
+                >
                   <MaterialCommunityIcons
-                    name={iconName}
-                    size={size}
-                    color={color}
+                    name="qrcode-scan"
+                    color="white"
+                    size={30}
                   />
-                );
-              },
-              tabBarLabel: "",
-              tabBarActiveTintColor: "#1573FE",
-              tabBarInactiveTintColor: "gray",
-            })}
-          >
-            <Tab.Screen
-              name="main"
-              component={MainScreen}
-              options={{ headerShown: false }}
-            />
-            <Tab.Screen
-              name="scan"
-              component={ScanScreen}
-              options={{
-                headerShown: false,
-                tabBarButton: (props) => (
-                  <TouchableOpacity
-                    style={styles.scanButton}
-                    onPress={(e) => {
-                      props.onPress?.(e);
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="qrcode-scan"
-                      color="white"
-                      size={30}
-                    />
-                  </TouchableOpacity>
-                ),
-              }}
-            />
-            <Tab.Screen
-              name="profile"
-              component={ProfileScreen}
-              options={{ headerShown: false }}
-            />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </>
-    );
-  }
+                </TouchableOpacity>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="profile"
+            component={ProfileScreen}
+            options={{ headerShown: false }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </>
+  );
 };
 const styles = StyleSheet.create({
   scanButton: {
@@ -108,12 +109,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     elevation: 10,
-  },
-  screen: {
-    display: "flex",
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    margin: 8,
   },
 });
 
