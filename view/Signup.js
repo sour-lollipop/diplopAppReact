@@ -9,55 +9,72 @@ import {
   Image,
   Alert,
 } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import axios from "axios";
 
-const Signup = ({ navigation }) => {
+const SignupScreen = ({ navigation }) => {
   const [fdata, setFdata] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    // user_id: "string",
+    user_name: "",
+    user_email: "",
+    user_phone: "",
     password: "",
+    // lang: "string",
+    // user_favorites: "string",
+    // user_image: "string",
   });
   const [errormsg, setErrormsg] = useState(null);
 
   const Sendtobackend = () => {
     // console.log(fdata);
     if (
-      fdata.email == "" ||
-      fdata.name == "" ||
-      fdata.phone == "" ||
+      fdata.user_email == "" ||
+      fdata.user_name == "" ||
+      fdata.user_phone == "" ||
       fdata.password == ""
     ) {
       return Alert.alert("All fields are required");
-    }
-    else{
-        fetch('http://127.0.0.1:8000/users')
+    } else {
+      console.log(fdata);
+
+      axios
+        .post("http://127.0.0.1:8000/clients", fdata)
+        .then((response) => {
+          // Обработка успешного ответа
+          Alert.alert("Success", response.data.message);
+        })
+        .catch((error) => {
+          // Обработка ошибки
+          console.error(error);
+          Alert.alert("Error", "An error occurred during registration.");
+        });
     }
   };
   return (
     <View>
-      <Image
+      {/* <Image
         style={styles.imageTop}
         source={require("../assets/welcome.jpg")}
-      />
+      /> */}
       <View style={styles.container}>
         <Text style={styles.Signintitle}>Sign up</Text>
         <TextInput
           style={styles.TextInput}
           placeholder="Email"
           placeholderTextColor={"#B3B3B3"}
-          onChangeText={(text) => setFdata({ ...fdata, email: text })}
+          onChangeText={(text) => setFdata({ ...fdata, user_email: text })}
         ></TextInput>
         <TextInput
           style={styles.TextInput}
           placeholder="Name"
           placeholderTextColor={"#B3B3B3"}
-          onChangeText={(text) => setFdata({ ...fdata, name: text })}
+          onChangeText={(text) => setFdata({ ...fdata, user_name: text })}
         ></TextInput>
         <TextInput
           style={styles.TextInput}
           placeholder="Phone number"
           placeholderTextColor={"#B3B3B3"}
-          onChangeText={(text) => setFdata({ ...fdata, phone: text })}
+          onChangeText={(text) => setFdata({ ...fdata, user_phone: text })}
         ></TextInput>
         <TextInput
           style={styles.TextInput}
@@ -128,3 +145,5 @@ const styles = StyleSheet.create({
     color: "blue",
   },
 });
+
+export default SignupScreen;

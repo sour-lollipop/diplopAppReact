@@ -82,7 +82,7 @@ const App = ({ navigation }) => {
           />
           <Tab.Screen
             name="profile"
-            component={ProfileScreen}
+            component={SignupPage}
             options={{ headerShown: false }}
           />
         </Tab.Navigator>
